@@ -1,12 +1,13 @@
 from fastapi import APIRouter
-from config.db import conn
-from models.index import users
-from schemas.index import User
+from models.user import User 
+from config.db import conn 
+from schemas.user import serializeDict, serializeList
+from bson import ObjectId
 user = APIRouter()
 
 @user.get("/")
-async def read_data():
-    return conn.execute(users.select()).fetchall()
+async def find_all_users():
+    return serializeList(conn.local.user.find())
 
 @user.get("/{id}")
 async def read_data(id: int):
@@ -31,7 +32,6 @@ async def update_data(id:int, user: User):
     ).where(users.c.id == id))
     return conn.execute(users.select()).fetchall()
 
-@user.delete("/{id}")
-async def delete_data():
-    conn.execute(users.delete().where(users.c.id == id))
-    return conn.execute(users.select()).fetchall()
+@user.delete('/{id}')
+async def delete_user(id,user: User):
+    return serializeDict(conn.local.user.find_one_and_delete({"_id":ObjectId(id)}))
