@@ -7,5 +7,4 @@ users  = Table(
     Column('name', String(255)),
     Column('email', String(255)),
     Column('password', String(255))
-    
 )
