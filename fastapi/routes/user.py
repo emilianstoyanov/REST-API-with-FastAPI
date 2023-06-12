@@ -28,9 +28,10 @@ async def update_data(id:int, user: User):
         name = user.name,
         email = user.email,
         password = user.password
-    )).where(users.c.id == id)
+    ).where(users.c.id == id))
     return conn.execute(users.select()).fetchall()
 
-@user.get("/")
-async def read_data():
+@user.delete("/")
+async def delete_data():
+    conn.execute(users.select().where(users.c.id == id))
     return conn.execute(users.select()).fetchall()
