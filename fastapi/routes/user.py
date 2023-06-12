@@ -24,14 +24,14 @@ async def write_data(user: User):
 
 @user.put("/{id}")
 async def update_data(id:int, user: User):
-    conn.execute(users.update(
+    conn.execute(users.update().values(
         name = user.name,
         email = user.email,
         password = user.password
     ).where(users.c.id == id))
     return conn.execute(users.select()).fetchall()
 
-@user.delete("/")
+@user.delete("/{id}")
 async def delete_data():
-    conn.execute(users.select().where(users.c.id == id))
+    conn.execute(users.delete().where(users.c.id == id))
     return conn.execute(users.select()).fetchall()
